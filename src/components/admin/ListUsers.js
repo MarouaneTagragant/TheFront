@@ -1,18 +1,23 @@
 import React, { Component } from 'react'
 import {connect} from 'react-redux'
-import {getContacts} from '../../actions/UsersActions'
+import {getUsers,getClasses,getUser} from '../../actions/UsersActions'
 import * as IconName from "react-icons/bs"
 import {Link} from 'react-router-dom'
+import DetailUser from './DetailUser'
 
 
 class ListUsers extends Component {
 
     componentDidMount(){
-        this.props.getContacts()
+        this.props.getUsers()
+        this.props.getClasses()
     }
+
 
     render() {
         const { users } = this.props;
+        const { classes } = this.props;
+
 
         return (
             <div className="col-md-10">
@@ -38,13 +43,18 @@ class ListUsers extends Component {
                                 <td>{User.phone}</td>
                                 <td>
                                     {
-                                        User.gender
+                                        (User.gender ===  1) ? "Male" : "Female"
                                     }
                                 </td>
                                 <td>{User.role.name}</td>
-                                <td>{User.classe_id}</td>
+                                <td>{
+                                        classes.map(Classe =>(
+                                            (User.classe_id === Classe.id) ? Classe.name : null
+                                        ))
+                                    }
+                                </td>
                                 <td>
-                                    <Link className="showIcon"><IconName.BsFillEyeFill /></Link>
+                                    <Link  to={`/admin/showUser/${User.id}`} className="showIcon"><IconName.BsFillEyeFill /></Link>
                                     <Link className="editIcon"><IconName.BsPencil /></Link>
                                     <Link className="deleteIcon"><IconName.BsFillTrashFill /></Link>
                                 </td>
@@ -62,8 +72,9 @@ class ListUsers extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        users : state.users.users
+        users   : state.users.users,
+        classes : state.classes.classes
     }
 }
 
-export default connect(mapStateToProps,{getContacts})(ListUsers)
+export default connect(mapStateToProps,{getUsers,getClasses,getUser})(ListUsers)

@@ -9,6 +9,8 @@ class Navbar extends Component {
                 <Link to="/admin/users">All users</Link>
                 <Link to="/admin/users/add">Add User</Link>
             </div>
+
+            
         )
     }
 }
